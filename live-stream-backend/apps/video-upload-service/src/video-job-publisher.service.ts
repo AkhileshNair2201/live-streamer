@@ -1,12 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { connect } from 'amqplib';
 
 @Injectable()
 export class VideoJobPublisherService {
-  private readonly rabbitmqUrl =
-    process.env.RABBITMQ_URL ?? 'amqp://localhost:5672';
-  private readonly queueName =
-    process.env.VIDEO_PROCESSING_QUEUE ?? 'video_processing_queue';
+  constructor(private readonly configService: ConfigService) {}
+
+  private get rabbitmqUrl(): string {
+    return this.configService.get<string>(
+      'RABBITMQ_URL',
+      'amqp://localhost:5672',
+    );
+  }
+
+  private get queueName(): string {
+    return this.configService.get<string>(
+      'VIDEO_PROCESSING_QUEUE',
+      'video_processing_queue',
+    );
+  }
 
   async publishVideoProcessingJob(videoId: string): Promise<void> {
     const connection = await connect(this.rabbitmqUrl);

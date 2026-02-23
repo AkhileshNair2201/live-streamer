@@ -3,13 +3,20 @@ import {
   BadRequestException,
   Injectable,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import axios, { AxiosError } from 'axios';
 import FormData from 'form-data';
 
 @Injectable()
 export class ApiGatewayService {
-  private readonly uploadServiceUrl =
-    process.env.VIDEO_UPLOAD_SERVICE_URL ?? 'http://localhost:3002';
+  constructor(private readonly configService: ConfigService) {}
+
+  private get uploadServiceUrl(): string {
+    return this.configService.get<string>(
+      'VIDEO_UPLOAD_SERVICE_URL',
+      'http://localhost:3002',
+    );
+  }
 
   getHello(): string {
     return 'Hello World!';

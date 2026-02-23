@@ -30,6 +30,7 @@ live-stream-backend/
 ## Setup
 
 ```bash
+cp ../.env.example ../.env
 pnpm install
 ```
 
@@ -103,10 +104,10 @@ pnpm run test:cov
 
 ## Runtime Notes (As Implemented)
 
-- `apps/live-stream-backend/src/main.ts` reads `process.env.PORT`, fallback `3000`.
-- `apps/api-gateway/src/main.ts` reads `process.env.PORT`, fallback `3001`.
-- `apps/video-upload-service/src/main.ts` reads `process.env.PORT`, fallback `3002`.
-- `apps/video-processing-worker/src/main.ts` reads `process.env.PORT`, fallback `3003`.
+- `apps/live-stream-backend/src/main.ts` reads `LIVE_STREAM_BACKEND_PORT`, fallback `3000`.
+- `apps/api-gateway/src/main.ts` reads `API_GATEWAY_PORT`, fallback `3001`.
+- `apps/video-upload-service/src/main.ts` reads `VIDEO_UPLOAD_SERVICE_PORT`, fallback `3002`.
+- `apps/video-processing-worker/src/main.ts` reads `VIDEO_PROCESSING_WORKER_PORT`, fallback `3003`.
 
 If you run multiple apps locally, set different ports per process.
 
@@ -116,12 +117,15 @@ If you run multiple apps locally, set different ports per process.
 
 - PostgreSQL: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
   Defaults: `localhost:5434`, `postgres/postgres`, DB `live_stream`
+  Docker image default: `postgres:17-alpine` (via `POSTGRES_IMAGE` in root `.env`)
 - MinIO/S3: `MINIO_ENDPOINT`, `MINIO_REGION`, `MINIO_ACCESS_KEY`, `MINIO_SECRET_KEY`, `MINIO_RAW_BUCKET`
 - RabbitMQ: `RABBITMQ_URL`, `VIDEO_PROCESSING_QUEUE`
 
 `api-gateway` uses:
 
 - Upload service target: `VIDEO_UPLOAD_SERVICE_URL` (default `http://localhost:3002`)
+
+All values are loaded from root `.env` (or fallback defaults if missing).
 
 ## Execution Phases
 
