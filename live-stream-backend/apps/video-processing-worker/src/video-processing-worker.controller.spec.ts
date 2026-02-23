@@ -8,7 +8,14 @@ describe('VideoProcessingWorkerController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [VideoProcessingWorkerController],
-      providers: [VideoProcessingWorkerService],
+      providers: [
+        {
+          provide: VideoProcessingWorkerService,
+          useValue: {
+            getHello: () => 'Hello World!',
+          },
+        },
+      ],
     }).compile();
 
     videoProcessingWorkerController = app.get<VideoProcessingWorkerController>(

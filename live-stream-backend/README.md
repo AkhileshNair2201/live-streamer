@@ -134,7 +134,7 @@ Execution phases are tracked in `docs/tasks`.
 - `docs/tasks/phase-0.md` - completed (infra setup with Docker services)
 - `docs/tasks/phase-1.md` - completed (Nest monorepo and app scaffolding)
 - `docs/tasks/phase-2.md` - implemented (upload, DB, MinIO, RabbitMQ publish, gateway proxy)
-- `docs/tasks/phase-3.md` - pending (worker processing and HLS conversion)
+- `docs/tasks/phase-3.md` - implemented in code (worker processing and HLS conversion; runtime verification pending)
 - `docs/tasks/phase-4.md` - pending (frontend upload view)
 - `docs/tasks/phase-5.md` - pending (frontend player view)
 - `docs/tasks/phase-6.md` - pending (refinement, tests, docs, containerization)

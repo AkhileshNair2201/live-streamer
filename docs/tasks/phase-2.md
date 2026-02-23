@@ -37,9 +37,9 @@
 - [x] **`api-gateway`: Proxy Setup:**
     - [x] Configure `api-gateway` to proxy `/upload` requests to the `video-upload-service`.
 
-- [ ] **Checkpoint Testing:**
-    - [ ] Use an API client (Postman/Insomnia) to send a video file to the `/upload` endpoint.
-    - [ ] **Verify:**
-        - [ ] The file is in the `videos-raw` MinIO bucket.
-        - [ ] A new record is in the `videos` PostgreSQL table.
-        - [ ] A message is in the `video_processing_queue` in the RabbitMQ UI.
+- [x] **Checkpoint Testing:**
+    - [x] Use an API client (Postman/Insomnia) to send a video file to the `/upload` endpoint.
+    - [x] **Verify:**
+        - [x] The file is in the `videos-raw` MinIO bucket.
+        - [x] A new record is in the `videos` PostgreSQL table.
+        - [x] A message is in the `video_processing_queue` in the RabbitMQ UI.

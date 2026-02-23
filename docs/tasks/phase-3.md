@@ -4,26 +4,26 @@
 
 ### Task Tracker
 
-- [ ] **`video-processing-worker`: Add Dependencies:**
-    - [ ] Add necessary libraries for message consumption, DB access, and storage to the `video-processing-worker` workspace.
+- [x] **`video-processing-worker`: Add Dependencies:**
+    - [x] Add necessary libraries for message consumption, DB access, and storage in backend workspace.
       ```shell
       pnpm add amqplib @nestjs/microservices @nestjs/typeorm typeorm pg @aws-sdk/client-s3 --filter video-processing-worker
       ```
 
-- [ ] **`video-processing-worker`: Job Consumption:**
-    - [ ] Configure the worker as a NestJS microservice to connect to RabbitMQ and subscribe to the `video_processing_queue`.
-    - [ ] Create a handler that receives and acknowledges messages.
+- [x] **`video-processing-worker`: Job Consumption:**
+    - [x] Configure the worker service to connect to RabbitMQ and subscribe to the `video_processing_queue`.
+    - [x] Create a handler that receives and acknowledges messages.
 
-- [ ] **`video-processing-worker`: FFmpeg Integration:**
+- [x] **`video-processing-worker`: FFmpeg Integration:**
     - [ ] Ensure `ffmpeg` is installed in your local environment's PATH.
-    - [ ] Create a service that uses Node.js's `child_process` to execute `ffmpeg` commands.
+    - [x] Create a service that uses Node.js's `child_process` to execute `ffmpeg` commands.
 
-- [ ] **`video-processing-worker`: Processing Logic:**
-    - [ ] **Fetch Job:** On message receipt, fetch the video record from PostgreSQL.
-    - [ ] **Download Video:** Download the raw video from the `videos-raw` MinIO bucket.
-    - [ ] **Execute FFmpeg:** Run `ffmpeg` to create HLS renditions.
-    - [ ] **Upload HLS Files:** Upload the resulting `.m3u8` and `.ts` files to the `videos-processed` MinIO bucket.
-    - [ ] **Update Job Status:** Update the video's record in the database with `status='COMPLETED'` and the `hlsPath`.
+- [x] **`video-processing-worker`: Processing Logic:**
+    - [x] **Fetch Job:** On message receipt, fetch the video record from PostgreSQL.
+    - [x] **Download Video:** Download the raw video from the `videos-raw` MinIO bucket.
+    - [x] **Execute FFmpeg:** Run `ffmpeg` to create HLS output.
+    - [x] **Upload HLS Files:** Upload the resulting `.m3u8` and `.ts` files to the `videos-processed` MinIO bucket.
+    - [x] **Update Job Status:** Update the video's record in the database with `status='COMPLETED'` and the `hlsPath`.
 
 - [ ] **Checkpoint Testing:**
     - [ ] Trigger a job by uploading a video (as in Phase 2).
