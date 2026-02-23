@@ -11,7 +11,9 @@ describe('VideoProcessingWorkerController', () => {
       providers: [VideoProcessingWorkerService],
     }).compile();
 
-    videoProcessingWorkerController = app.get<VideoProcessingWorkerController>(VideoProcessingWorkerController);
+    videoProcessingWorkerController = app.get<VideoProcessingWorkerController>(
+      VideoProcessingWorkerController,
+    );
   });
 
   describe('root', () => {

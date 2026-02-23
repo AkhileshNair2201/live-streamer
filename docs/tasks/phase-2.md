@@ -4,38 +4,38 @@
 
 ### Task Tracker
 
-- [ ] **`video-upload-service`: Database Integration:**
-    - [ ] Add TypeORM, `pg`, and `@nestjs/typeorm` to the `video-upload-service` workspace.
+- [x] **`video-upload-service`: Database Integration:**
+    - [x] Add TypeORM, `pg`, and `@nestjs/typeorm` to the `video-upload-service` workspace.
       ```shell
       pnpm add @nestjs/typeorm typeorm pg --filter video-upload-service
       ```
-    - [ ] Configure the `video-upload-service` module to connect to the PostgreSQL Docker container.
-    - [ ] Create a `Video` entity.
-    - [ ] Use TypeORM's `synchronize: true` for development.
+    - [x] Configure the `video-upload-service` module to connect to PostgreSQL via env config.
+    - [x] Create a `Video` entity.
+    - [x] Use TypeORM's `synchronize: true` for development.
 
-- [ ] **`video-upload-service`: Storage Integration:**
-    - [ ] Add the AWS S3 client library to the workspace.
+- [x] **`video-upload-service`: Storage Integration:**
+    - [x] Add the AWS S3 client library to the workspace.
       ```shell
       pnpm add @aws-sdk/client-s3 --filter video-upload-service
       ```
-    - [ ] Create a `StorageService` configured to connect to the MinIO container.
+    - [x] Create a `StorageService` configured to connect to MinIO/S3-compatible storage.
 
-- [ ] **`video-upload-service`: API Endpoint:**
-    - [ ] Create a new controller in `video-upload-service`.
-    *   [ ] Implement a `POST` endpoint for `multipart/form-data`.
-    *   [ ] Add logic to stream the file to the `videos-raw` MinIO bucket.
-    *   [ ] Save a new record to the `videos` table with a `PENDING` status.
+- [x] **`video-upload-service`: API Endpoint:**
+    - [x] Implement `POST /upload` in `video-upload-service`.
+    *   [x] Implement a `POST` endpoint for `multipart/form-data`.
+    *   [x] Add logic to upload the file to the `videos-raw` bucket.
+    *   [x] Save a new record to the `videos` table with a `PENDING` status.
 
-- [ ] **`video-upload-service`: Job Publishing:**
-    - [ ] Add RabbitMQ client libraries to the workspace.
+- [x] **`video-upload-service`: Job Publishing:**
+    - [x] Add RabbitMQ client libraries to the workspace.
       ```shell
       pnpm add amqplib @nestjs/microservices --filter video-upload-service
       ```
-    - [ ] Configure the service to connect to the RabbitMQ container.
-    - [ ] After saving the DB record, publish a message to `video_processing_queue` with the `videoId`.
+    - [x] Configure the service to connect to RabbitMQ via env config.
+    - [x] After saving the DB record, publish a message to `video_processing_queue` with the `videoId`.
 
-- [ ] **`api-gateway`: Proxy Setup:**
-    - [ ] Configure `api-gateway` to proxy `/upload` requests to the `video-upload-service`.
+- [x] **`api-gateway`: Proxy Setup:**
+    - [x] Configure `api-gateway` to proxy `/upload` requests to the `video-upload-service`.
 
 - [ ] **Checkpoint Testing:**
     - [ ] Use an API client (Postman/Insomnia) to send a video file to the `/upload` endpoint.

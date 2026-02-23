@@ -8,10 +8,20 @@ describe('VideoUploadServiceController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [VideoUploadServiceController],
-      providers: [VideoUploadServiceService],
+      providers: [
+        {
+          provide: VideoUploadServiceService,
+          useValue: {
+            getHello: () => 'Hello World!',
+            uploadVideo: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
-    videoUploadServiceController = app.get<VideoUploadServiceController>(VideoUploadServiceController);
+    videoUploadServiceController = app.get<VideoUploadServiceController>(
+      VideoUploadServiceController,
+    );
   });
 
   describe('root', () => {

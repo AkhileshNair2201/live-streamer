@@ -1,12 +1,29 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { VideoUploadServiceService } from './video-upload-service.service';
 
 @Controller()
 export class VideoUploadServiceController {
-  constructor(private readonly videoUploadServiceService: VideoUploadServiceService) {}
+  constructor(
+    private readonly videoUploadServiceService: VideoUploadServiceService,
+  ) {}
 
   @Get()
   getHello(): string {
     return this.videoUploadServiceService.getHello();
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  upload(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<{ videoId: string; status: string; storageKey: string }> {
+    return this.videoUploadServiceService.uploadVideo(file);
   }
 }

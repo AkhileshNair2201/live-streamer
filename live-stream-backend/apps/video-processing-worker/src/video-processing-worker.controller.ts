@@ -3,7 +3,9 @@ import { VideoProcessingWorkerService } from './video-processing-worker.service'
 
 @Controller()
 export class VideoProcessingWorkerController {
-  constructor(private readonly videoProcessingWorkerService: VideoProcessingWorkerService) {}
+  constructor(
+    private readonly videoProcessingWorkerService: VideoProcessingWorkerService,
+  ) {}
 
   @Get()
   getHello(): string {

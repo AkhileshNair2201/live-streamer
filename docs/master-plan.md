@@ -27,7 +27,7 @@ This document outlines a phased master plan for implementing the LiveStream Conv
         *   `postgres:latest`
         *   `rabbitmq:3-management` (the `management` tag includes the UI)
         *   `minio/minio`
-    *   Configure environment variables, ports (e.g., `5432` for Postgres, `5672` for RabbitMQ, `9000` for Minio API, `9001` for Minio Console), and persistent volumes.
+    *   Configure environment variables, ports (e.g., `5434` for Postgres host mapping, `5672` for RabbitMQ, `9000` for Minio API, `9001` for Minio Console), and persistent volumes.
 3.  **Launch Services:**
     *   Run `docker-compose up -d`.
 

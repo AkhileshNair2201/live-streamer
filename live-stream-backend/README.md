@@ -9,9 +9,12 @@ NestJS monorepo for the live-stream backend services.
 - `video-upload-service`
 - `video-processing-worker`
 
-All apps currently expose a single route:
+Current routes:
 
-- `GET /` -> returns `Hello World!`
+- `live-stream-backend`: `GET /` -> `Hello World!`
+- `api-gateway`: `GET /` -> `Hello World!`, `POST /upload` (multipart proxy)
+- `video-upload-service`: `GET /` -> `Hello World!`, `POST /upload` (stores file + creates job)
+- `video-processing-worker`: `GET /` -> `Hello World!`
 
 ## Monorepo Structure
 
@@ -107,14 +110,27 @@ pnpm run test:cov
 
 If you run multiple apps locally, set different ports per process.
 
-## Phases Tracker
+## Phase 2 Config (Upload Path)
+
+`video-upload-service` uses:
+
+- PostgreSQL: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+  Defaults: `localhost:5434`, `postgres/postgres`, DB `live_stream`
+- MinIO/S3: `MINIO_ENDPOINT`, `MINIO_REGION`, `MINIO_ACCESS_KEY`, `MINIO_SECRET_KEY`, `MINIO_RAW_BUCKET`
+- RabbitMQ: `RABBITMQ_URL`, `VIDEO_PROCESSING_QUEUE`
+
+`api-gateway` uses:
+
+- Upload service target: `VIDEO_UPLOAD_SERVICE_URL` (default `http://localhost:3002`)
+
+## Execution Phases
 
 Execution phases are tracked in `docs/tasks`.
 
-- `docs/tasks/phase-0.md` - completed
-- `docs/tasks/phase-1.md` - completed
-- `docs/tasks/phase-2.md` - pending
-- `docs/tasks/phase-3.md` - pending
-- `docs/tasks/phase-4.md` - pending
-- `docs/tasks/phase-5.md` - pending
-- `docs/tasks/phase-6.md` - pending
+- `docs/tasks/phase-0.md` - completed (infra setup with Docker services)
+- `docs/tasks/phase-1.md` - completed (Nest monorepo and app scaffolding)
+- `docs/tasks/phase-2.md` - implemented (upload, DB, MinIO, RabbitMQ publish, gateway proxy)
+- `docs/tasks/phase-3.md` - pending (worker processing and HLS conversion)
+- `docs/tasks/phase-4.md` - pending (frontend upload view)
+- `docs/tasks/phase-5.md` - pending (frontend player view)
+- `docs/tasks/phase-6.md` - pending (refinement, tests, docs, containerization)
