@@ -84,3 +84,12 @@ button:disabled {
   color: #b91c1c !important;
   margin-top: 0.75rem !important;
 }
+
+.player-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0f172a;
+  margin-top: 0.75rem;
+}

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { Repository } from 'typeorm';
@@ -49,6 +53,29 @@ export class VideoUploadServiceService {
       videoId: saved.id,
       status: saved.status,
       storageKey: saved.storageKey,
+    };
+  }
+
+  async getVideoById(videoId: string): Promise<{
+    id: string;
+    status: VideoStatus;
+    hlsPath: string | null;
+    storageKey: string;
+    originalFileName: string;
+  }> {
+    const video = await this.videosRepository.findOne({
+      where: { id: videoId },
+    });
+    if (!video) {
+      throw new NotFoundException(`Video ${videoId} not found`);
+    }
+
+    return {
+      id: video.id,
+      status: video.status,
+      hlsPath: video.hlsPath,
+      storageKey: video.storageKey,
+      originalFileName: video.originalFileName,
     };
   }
 

@@ -4,26 +4,26 @@
 
 ### Task Tracker
 
-- [ ] **Create Player UI Component:**
-    - [ ] In the `frontend` project, develop a `PlayerView.tsx` component.
-    - [ ] Use the `useParams` hook from `react-router-dom` to get the `videoId` from the URL.
+- [x] **Create Player UI Component:**
+    - [x] In the `frontend` project, develop a `PlayerView.tsx` component.
+    - [x] Use the `useParams` hook from `react-router-dom` to get the `videoId` from the URL.
 
-- [ ] **Backend: Create Status Endpoint:**
-    - [ ] In the `api-gateway` app, create a `GET /videos/:id` endpoint.
-    - [ ] This endpoint should fetch and return the video record (including `status` and `hlsPath`).
+- [x] **Backend: Create Status Endpoint:**
+    - [x] In the `api-gateway` app, create a `GET /videos/:id` endpoint.
+    - [x] This endpoint fetches and returns the video record (including `status` and `hlsPath`).
 
-- [ ] **Frontend: Implement Status Polling:**
-    - [ ] In `PlayerView.tsx`, use a `useEffect` hook to poll the `/videos/:id` endpoint.
-    - [ ] Set an interval to re-fetch the status every 3-5 seconds.
-    - [ ] Display a loading message while `status` is not `COMPLETED`.
-    - [ ] Clear the interval once `status` is `COMPLETED`.
+- [x] **Frontend: Implement Status Polling:**
+    - [x] In `PlayerView.tsx`, use a `useEffect` hook to poll the `/videos/:id` endpoint.
+    - [x] Set an interval to re-fetch the status every 3-5 seconds.
+    - [x] Display a loading message while `status` is not `COMPLETED`.
+    - [x] Clear the interval once `status` is `COMPLETED`.
 
-- [ ] **Integrate HLS Player:**
-    - [ ] Add `react-player` and `hls.js` to the `frontend` workspace.
+- [x] **Integrate HLS Player:**
+    - [x] Add `react-player` and `hls.js` to the `frontend` workspace.
       ```shell
       pnpm add react-player hls.js --filter frontend
       ```
-    - [ ] When the video status is `COMPLETED`, render the `ReactPlayer` component and pass the `hlsPath` to its `url` prop.
+    - [x] When the video status is `COMPLETED`, render the `ReactPlayer` component and pass the HLS URL to its `src` prop.
 
 - [ ] **Checkpoint Testing:**
     - [ ] Upload a video and get redirected to the player view.

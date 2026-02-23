@@ -30,10 +30,10 @@
     - [x] Set the default route (`/`) to `UploadView`.
     - [x] After a successful upload, navigate the user to `/watch/{videoId}`.
 
-- [ ] **Checkpoint Testing:**
-    - [ ] Run the frontend dev server from the root: `pnpm --filter frontend dev`.
-    - [ ] Open the app, select a video, and upload it.
-    - [ ] **Verify:**
-        - [ ] The upload progress bar updates.
-        - [ ] The backend processes the file.
-        - [ ] The browser redirects to `/watch/some-id`.
+- [x] **Checkpoint Testing:**
+    - [x] Run the frontend dev server from the root: `pnpm --filter frontend dev`.
+    - [x] Open the app, select a video, and upload it.
+    - [x] **Verify:**
+        - [x] The upload progress bar updates.
+        - [x] The backend processes the file.
+        - [x] The browser redirects to `/watch/some-id`.

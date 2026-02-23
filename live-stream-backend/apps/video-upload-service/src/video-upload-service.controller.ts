@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -25,5 +26,16 @@ export class VideoUploadServiceController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<{ videoId: string; status: string; storageKey: string }> {
     return this.videoUploadServiceService.uploadVideo(file);
+  }
+
+  @Get('videos/:id')
+  getVideo(@Param('id') id: string): Promise<{
+    id: string;
+    status: string;
+    hlsPath: string | null;
+    storageKey: string;
+    originalFileName: string;
+  }> {
+    return this.videoUploadServiceService.getVideoById(id);
   }
 }
