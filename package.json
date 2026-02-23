@@ -2,5 +2,19 @@
   "name": "sandbox-live-streamer",
   "private": true,
   "version": "0.0.0",
-  "packageManager": "pnpm@8.15.5"
+  "packageManager": "pnpm@8.15.5",
+  "scripts": {
+    "backend:start": "pnpm --filter live-stream-backend start",
+    "backend:start:dev": "pnpm --filter live-stream-backend start:dev",
+    "backend:start:api-gateway": "PORT=3001 pnpm --filter live-stream-backend exec nest start api-gateway",
+    "backend:start:api-gateway:dev": "PORT=3001 pnpm --filter live-stream-backend exec nest start api-gateway --watch",
+    "backend:start:video-upload-service": "PORT=3002 pnpm --filter live-stream-backend exec nest start video-upload-service",
+    "backend:start:video-upload-service:dev": "PORT=3002 pnpm --filter live-stream-backend exec nest start video-upload-service --watch",
+    "backend:start:video-processing-worker": "PORT=3003 pnpm --filter live-stream-backend exec nest start video-processing-worker",
+    "backend:start:video-processing-worker:dev": "PORT=3003 pnpm --filter live-stream-backend exec nest start video-processing-worker --watch",
+    "backend:start:live-stream-backend": "PORT=3000 pnpm --filter live-stream-backend exec nest start live-stream-backend",
+    "backend:start:live-stream-backend:dev": "PORT=3000 pnpm --filter live-stream-backend exec nest start live-stream-backend --watch",
+    "backend:build": "pnpm --filter live-stream-backend build",
+    "backend:test": "pnpm --filter live-stream-backend test"
+  }
 }

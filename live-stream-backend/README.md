@@ -100,10 +100,10 @@ pnpm run test:cov
 
 ## Runtime Notes (As Implemented)
 
-- `apps/live-stream-backend/src/main.ts` reads `process.env.PORT` (uppercase), fallback `3000`.
-- `apps/api-gateway/src/main.ts` reads `process.env.port` (lowercase), fallback `3000`.
-- `apps/video-upload-service/src/main.ts` reads `process.env.port` (lowercase), fallback `3000`.
-- `apps/video-processing-worker/src/main.ts` reads `process.env.port` (lowercase), fallback `3000`.
+- `apps/live-stream-backend/src/main.ts` reads `process.env.PORT`, fallback `3000`.
+- `apps/api-gateway/src/main.ts` reads `process.env.PORT`, fallback `3001`.
+- `apps/video-upload-service/src/main.ts` reads `process.env.PORT`, fallback `3002`.
+- `apps/video-processing-worker/src/main.ts` reads `process.env.PORT`, fallback `3003`.
 
 If you run multiple apps locally, set different ports per process.
 
