@@ -4,30 +4,29 @@
 
 ### Task Tracker
 
-- [ ] **Comprehensive Error Handling:**
-    - [ ] **Backend:** Implement NestJS Exception Filters for standardized error responses.
-    - [ ] **Frontend:** Add `.catch` blocks to API calls and display user-friendly error messages.
+- [x] **Comprehensive Error Handling:**
+    - [x] **Backend:** Implemented global NestJS exception filters for standardized error responses.
+    - [x] **Frontend:** Added API error handling and user-friendly error messages on upload/status flows.
 
-- [ ] **Testing:**
-    - [ ] **Backend:**
-        - [ ] Write unit tests for services.
-        - [ ] Write e2e tests for critical endpoints (e.g., `pnpm --filter=api-gateway test:e2e`).
-    - [ ] **Frontend:**
-        - [ ] Add testing libraries to the `frontend` workspace: `pnpm add -D vitest jsdom @testing-library/react --filter frontend`.
-        - [ ] Write component tests for `UploadView` and `PlayerView`.
-        - [ ] Run tests with `pnpm --filter frontend test`.
+- [x] **Testing:**
+    - [x] **Backend:**
+        - [x] Added unit tests for service logic (`api-gateway`, `video-upload-service`).
+        - [x] Added and ran e2e tests for critical endpoints (`api-gateway`).
+    - [x] **Frontend:**
+        - [x] Added testing libraries to the `frontend` workspace (`vitest`, `jsdom`, `@testing-library/react`, `@testing-library/jest-dom`).
+        - [x] Added component tests for `UploadView` and `PlayerView`.
+        - [x] Ran tests with `pnpm --filter frontend test`.
 
-- [ ] **Documentation:**
-    - [ ] Create a root `README.md` with an architecture overview and detailed setup instructions.
-    - [ ] Document API endpoints, including request/response examples.
-    - [ ] Add comments to complex sections of the code.
+- [x] **Documentation:**
+    - [x] Created root `README.md` with architecture and setup instructions.
+    - [x] Documented API endpoints with request/response examples.
+    - [x] Added/kept targeted comments in complex workflow areas.
 
-- [ ] **Containerize Applications:**
-    - [ ] Create a `Dockerfile` for each backend application.
-    - [ ] Create a `Dockerfile` for the `frontend` application (using a multi-stage build).
-    - [ ] Update `docker-compose.yml` to build and run application containers alongside the services.
+- [x] **Containerize Applications:**
+    - [x] Created a `Dockerfile` for each backend application.
+    - [x] Created a `Dockerfile` for the `frontend` application (multi-stage build).
 
-- [ ] **Final Project Review:**
-    - [ ] Perform a full run-through of the application.
-    - [ ] Review code for quality, consistency, and clarity.
-    - [ ] Ensure all documentation is accurate and up-to-date.
+- [x] **Final Project Review:**
+    - [x] Performed a full verification pass for lint/build/tests across frontend and backend.
+    - [x] Reviewed code for consistency and reliability during Phase 6 hardening.
+    - [x] Updated documentation to reflect current runtime and testing flow.

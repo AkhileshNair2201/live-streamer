@@ -7,6 +7,7 @@
     "frontend:start": "pnpm --filter frontend run dev",
     "frontend:build": "pnpm --filter frontend run build",
     "frontend:lint": "pnpm --filter frontend run lint",
+    "frontend:test": "pnpm --filter frontend run test",
     "backend:start": "pnpm --filter live-stream-backend start",
     "backend:start:dev": "pnpm --filter live-stream-backend start:dev",
     "backend:start:api-gateway": "pnpm --filter live-stream-backend exec nest start api-gateway",
@@ -18,6 +19,8 @@
     "backend:start:live-stream-backend": "pnpm --filter live-stream-backend exec nest start live-stream-backend",
     "backend:start:live-stream-backend:dev": "pnpm --filter live-stream-backend exec nest start live-stream-backend --watch",
     "backend:build": "pnpm --filter live-stream-backend build",
-    "backend:test": "pnpm --filter live-stream-backend test"
+    "backend:test": "pnpm --filter live-stream-backend test",
+    "backend:test:e2e": "pnpm --filter live-stream-backend run test:e2e",
+    "backend:test:e2e:api-gateway": "pnpm --filter live-stream-backend run test:e2e:api-gateway"
   }
 }

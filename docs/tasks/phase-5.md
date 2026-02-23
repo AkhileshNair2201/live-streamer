@@ -25,9 +25,9 @@
       ```
     - [x] When the video status is `COMPLETED`, render the `ReactPlayer` component and pass the HLS URL to its `src` prop.
 
-- [ ] **Checkpoint Testing:**
-    - [ ] Upload a video and get redirected to the player view.
-    - [ ] **Verify:**
-        - [ ] A "processing" message is displayed.
-        - [ ] The message is replaced by a video player after a short time.
-        - [ ] The video player successfully loads and plays the HLS stream.
+- [x] **Checkpoint Testing:**
+    - [x] Upload a video and get redirected to the player view.
+    - [x] **Verify:**
+        - [x] A "processing" message is displayed.
+        - [x] The message is replaced by a video player after a short time.
+        - [x] The video player successfully loads and plays the HLS stream.

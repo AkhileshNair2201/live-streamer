@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/live-stream-backend/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/live-stream-backend/test/jest-e2e.json",
+    "test:e2e:api-gateway": "jest --config ./apps/api-gateway/test/jest-e2e.json",
+    "test:e2e:video-upload-service": "jest --config ./apps/video-upload-service/test/jest-e2e.json",
+    "test:e2e:video-processing-worker": "jest --config ./apps/video-processing-worker/test/jest-e2e.json"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.995.0",
