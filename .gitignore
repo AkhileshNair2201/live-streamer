@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# pnpm / corepack local caches
+.pnpm-home/
+.pnpm-store/
+.corepack-home/
+
+# build outputs
+dist/
+build/
+coverage/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# env
+.env
+.env.*
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
