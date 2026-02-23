@@ -26,7 +26,7 @@ export class Video {
   @Column({ type: 'varchar', length: 32 })
   status: VideoStatus;
 
-  @Column({ name: 'hls_path', nullable: true })
+  @Column({ name: 'hls_path', type: 'text', nullable: true })
   hlsPath: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
