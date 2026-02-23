@@ -25,9 +25,9 @@
     - [x] **Upload HLS Files:** Upload the resulting `.m3u8` and `.ts` files to the `videos-processed` MinIO bucket.
     - [x] **Update Job Status:** Update the video's record in the database with `status='COMPLETED'` and the `hlsPath`.
 
-- [ ] **Checkpoint Testing:**
-    - [ ] Trigger a job by uploading a video (as in Phase 2).
-    - [ ] **Verify:**
-        - [ ] The worker's logs show a job was processed.
-        - [ ] HLS files appear in the `videos-processed` MinIO bucket.
-        - [ ] The video's status in PostgreSQL is updated to `COMPLETED`.
+- [x] **Checkpoint Testing:**
+    - [x] Trigger a job by uploading a video (as in Phase 2).
+    - [x] **Verify:**
+        - [x] The worker's logs show a job was processed.
+        - [x] HLS files appear in the `videos-processed` MinIO bucket.
+        - [x] The video's status in PostgreSQL is updated to `COMPLETED`.

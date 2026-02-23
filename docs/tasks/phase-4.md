@@ -4,31 +4,31 @@
 
 ### Task Tracker
 
-- [ ] **Scaffold Frontend Project:**
-    - [ ] At the project root, run `pnpm create vite frontend --template react-ts`.
-    - [ ] The `pnpm-workspace.yaml` file should already be configured to recognize the `frontend` directory.
-    - [ ] Run `pnpm install` from the root to link the new workspace package.
+- [x] **Scaffold Frontend Project:**
+    - [x] At the project root, run `pnpm create vite frontend --template react-ts`.
+    - [x] The `pnpm-workspace.yaml` file is configured to recognize the `frontend` directory.
+    - [x] Run `pnpm install` from the root to link the new workspace package.
 
-- [ ] **Add Frontend Dependencies:**
-    - [ ] Add `axios` and `react-router-dom` to the `frontend` workspace.
+- [x] **Add Frontend Dependencies:**
+    - [x] Add `axios` and `react-router-dom` to the `frontend` workspace.
       ```shell
       pnpm add axios react-router-dom --filter frontend
       ```
 
-- [ ] **Create Upload UI Component:**
-    - [ ] In the `frontend` project, create a new `pages` directory.
-    - [ ] Develop an `UploadView.tsx` component with a file input and submit button.
+- [x] **Create Upload UI Component:**
+    - [x] In the `frontend` project, create a new `pages` directory.
+    - [x] Develop an `UploadView.tsx` component with a file input and submit button.
 
-- [ ] **Implement Upload Logic:**
-    - [ ] In `UploadView.tsx`, create a form handler.
-    - [ ] On submit, construct a `FormData` object.
-    - [ ] Use `axios` to `POST` the `FormData` to the backend.
-    - [ ] Implement an `onUploadProgress` handler to display the upload percentage.
+- [x] **Implement Upload Logic:**
+    - [x] In `UploadView.tsx`, create a form handler.
+    - [x] On submit, construct a `FormData` object.
+    - [x] Use `axios` to `POST` the `FormData` to the backend.
+    - [x] Implement an `onUploadProgress` handler to display the upload percentage.
 
-- [ ] **Setup Routing:**
-    - [ ] Configure `react-router-dom` in `frontend/src/App.tsx`.
-    - [ ] Set the default route (`/`) to `UploadView`.
-    - [ ] After a successful upload, navigate the user to `/watch/{videoId}`.
+- [x] **Setup Routing:**
+    - [x] Configure `react-router-dom` in `frontend/src/App.tsx`.
+    - [x] Set the default route (`/`) to `UploadView`.
+    - [x] After a successful upload, navigate the user to `/watch/{videoId}`.
 
 - [ ] **Checkpoint Testing:**
     - [ ] Run the frontend dev server from the root: `pnpm --filter frontend dev`.

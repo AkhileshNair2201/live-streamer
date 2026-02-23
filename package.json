@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "packageManager": "pnpm@8.15.5",
   "scripts": {
+    "frontend:start": "pnpm --filter frontend run dev",
+    "frontend:build": "pnpm --filter frontend run build",
+    "frontend:lint": "pnpm --filter frontend run lint",
     "backend:start": "pnpm --filter live-stream-backend start",
     "backend:start:dev": "pnpm --filter live-stream-backend start:dev",
     "backend:start:api-gateway": "pnpm --filter live-stream-backend exec nest start api-gateway",
