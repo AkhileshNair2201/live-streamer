@@ -28,6 +28,21 @@ export class VideoUploadServiceController {
     return this.videoUploadServiceService.uploadVideo(file);
   }
 
+  @Get('videos')
+  getVideos(): Promise<
+    Array<{
+      id: string;
+      status: string;
+      hlsPath: string | null;
+      storageKey: string;
+      originalFileName: string;
+      createdAt: string;
+      updatedAt: string;
+    }>
+  > {
+    return this.videoUploadServiceService.getVideos();
+  }
+
   @Get('videos/:id')
   getVideo(@Param('id') id: string): Promise<{
     id: string;

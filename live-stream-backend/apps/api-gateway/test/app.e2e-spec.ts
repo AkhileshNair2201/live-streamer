@@ -42,4 +42,29 @@ describe('ApiGatewayController (e2e)', () => {
         hlsPath: null,
       });
   });
+
+  it('/videos (GET)', async () => {
+    jest.spyOn(apiGatewayService, 'getVideos').mockResolvedValueOnce([
+      {
+        id: 'video-1',
+        status: 'PENDING',
+        hlsPath: null,
+        storageKey: 'x',
+        originalFileName: 'a.mp4',
+      },
+    ]);
+
+    return request(app.getHttpServer())
+      .get('/videos')
+      .expect(200)
+      .expect([
+        {
+          id: 'video-1',
+          status: 'PENDING',
+          hlsPath: null,
+          storageKey: 'x',
+          originalFileName: 'a.mp4',
+        },
+      ]);
+  });
 });

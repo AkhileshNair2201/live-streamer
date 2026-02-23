@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import ReactPlayer from 'react-player';
 
 type UploadResponse = {
   videoId: string;
@@ -9,16 +9,69 @@ type UploadResponse = {
   storageKey: string;
 };
 
+type VideoStatusResponse = {
+  id: string;
+  status: 'PENDING' | 'COMPLETED' | 'FAILED' | string;
+  hlsPath: string | null;
+  storageKey: string;
+  originalFileName: string;
+};
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001';
 
 export default function UploadView() {
-  const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+  const [videoStatus, setVideoStatus] = useState<VideoStatusResponse | null>(
+    null,
+  );
 
   const progressLabel = useMemo(() => `${Math.min(100, Math.max(0, Math.round(progress)))}%`, [progress]);
+
+  useEffect(() => {
+    if (!activeVideoId) {
+      return;
+    }
+
+    let active = true;
+    let timer: number | null = null;
+
+    const fetchStatus = async () => {
+      try {
+        const response = await axios.get<VideoStatusResponse>(
+          `${API_BASE_URL}/videos/${activeVideoId}`,
+        );
+        if (!active) {
+          return;
+        }
+
+        setVideoStatus(response.data);
+
+        if (
+          response.data.status !== 'COMPLETED' &&
+          response.data.status !== 'FAILED'
+        ) {
+          timer = window.setTimeout(fetchStatus, 4000);
+        }
+      } catch {
+        if (active) {
+          setError('Failed to fetch uploaded video status.');
+        }
+      }
+    };
+
+    void fetchStatus();
+
+    return () => {
+      active = false;
+      if (timer !== null) {
+        window.clearTimeout(timer);
+      }
+    };
+  }, [activeVideoId]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,6 +84,8 @@ export default function UploadView() {
     setError(null);
     setIsUploading(true);
     setProgress(0);
+    setActiveVideoId(null);
+    setVideoStatus(null);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -52,15 +107,8 @@ export default function UploadView() {
         return;
       }
 
-      const target = `/watch/${videoId}`;
-      navigate(target);
-
-      // Fallback for cases where router navigation is blocked/interrupted.
-      window.setTimeout(() => {
-        if (window.location.pathname !== target) {
-          window.location.assign(target);
-        }
-      }, 0);
+      setActiveVideoId(videoId);
+      setIsUploading(false);
     } catch (caughtError) {
       if (axios.isAxiosError(caughtError)) {
         const message =
@@ -75,11 +123,23 @@ export default function UploadView() {
     }
   }
 
+  let playbackUrl: string | null = null;
+  if (videoStatus?.id && videoStatus?.hlsPath) {
+    const fileName = videoStatus.hlsPath.split('/').pop() ?? 'index.m3u8';
+    playbackUrl = `${API_BASE_URL}/hls/${videoStatus.id}/${fileName}`;
+  }
+
   return (
     <main className="page-shell">
-      <section className="upload-card">
-        <h1>Upload Video</h1>
-        <p>Choose a file and send it to the conversion pipeline.</p>
+      <section className="surface-card">
+        <div className="page-head">
+          <p className="eyebrow">Phase 7 Upload Flow</p>
+          <h1>Upload and Auto-Play</h1>
+          <p>Upload a video and stay on this page while processing completes.</p>
+          <a className="nav-link" href="/">
+            Go to library
+          </a>
+        </div>
 
         <form onSubmit={handleSubmit} className="upload-form">
           <label htmlFor="videoFile" className="file-label">
@@ -108,6 +168,31 @@ export default function UploadView() {
         )}
 
         {error && <p className="error-text">{error}</p>}
+
+        {activeVideoId && (
+          <p className="muted-text">
+            Current video ID: <code>{activeVideoId}</code>
+          </p>
+        )}
+
+        {!error && videoStatus?.status === 'PENDING' && (
+          <p className="muted-text">Processing in progress. This page will auto-refresh the status.</p>
+        )}
+
+        {!error && videoStatus?.status === 'FAILED' && (
+          <p className="error-text">Processing failed. Please upload again.</p>
+        )}
+
+        {!error && videoStatus?.status === 'COMPLETED' && playbackUrl && (
+          <div className="player-block">
+            <p className="muted-text">
+              Stream ready: <code>{playbackUrl}</code>
+            </p>
+            <div className="player-wrap">
+              <ReactPlayer src={playbackUrl} controls width="100%" height="100%" />
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );

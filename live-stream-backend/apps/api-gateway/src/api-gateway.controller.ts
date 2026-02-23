@@ -27,6 +27,11 @@ export class ApiGatewayController {
     return this.apiGatewayService.proxyUpload(file);
   }
 
+  @Get('videos')
+  getVideos(): Promise<unknown> {
+    return this.apiGatewayService.getVideos();
+  }
+
   @Get('videos/:id')
   getVideo(@Param('id') id: string): Promise<unknown> {
     return this.apiGatewayService.getVideoStatus(id);

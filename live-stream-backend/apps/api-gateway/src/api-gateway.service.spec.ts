@@ -46,4 +46,21 @@ describe('ApiGatewayService', () => {
       hlsPath: null,
     });
   });
+
+  it('returns data from list videos proxy endpoint', async () => {
+    mockedAxios.get.mockResolvedValueOnce({
+      data: [
+        { id: 'video-2', status: 'COMPLETED', hlsPath: 'video-2/index.m3u8' },
+      ],
+    });
+
+    const result = await service.getVideos();
+
+    expect(mockedAxios.get.mock.calls[0]).toEqual([
+      'http://upload-service:3002/videos',
+    ]);
+    expect(result).toEqual([
+      { id: 'video-2', status: 'COMPLETED', hlsPath: 'video-2/index.m3u8' },
+    ]);
+  });
 });

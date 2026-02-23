@@ -105,6 +105,21 @@ export class ApiGatewayService {
     }
   }
 
+  async getVideos(): Promise<unknown> {
+    try {
+      const response = await axios.get(`${this.uploadServiceUrl}/videos`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        throw new BadGatewayException(error.response.data);
+      }
+
+      throw new BadGatewayException(
+        'Failed to fetch videos from video-upload-service',
+      );
+    }
+  }
+
   async getHlsFile(
     videoId: string,
     fileName: string,

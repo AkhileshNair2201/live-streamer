@@ -79,6 +79,32 @@ export class VideoUploadServiceService {
     };
   }
 
+  async getVideos(): Promise<
+    Array<{
+      id: string;
+      status: VideoStatus;
+      hlsPath: string | null;
+      storageKey: string;
+      originalFileName: string;
+      createdAt: string;
+      updatedAt: string;
+    }>
+  > {
+    const videos = await this.videosRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+
+    return videos.map((video) => ({
+      id: video.id,
+      status: video.status,
+      hlsPath: video.hlsPath,
+      storageKey: video.storageKey,
+      originalFileName: video.originalFileName,
+      createdAt: video.createdAt.toISOString(),
+      updatedAt: video.updatedAt.toISOString(),
+    }));
+  }
+
   private buildStorageKey(originalName: string): string {
     const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
     return `${randomUUID()}/${Date.now()}-${safeName}`;
