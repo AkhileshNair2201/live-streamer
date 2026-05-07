@@ -1,240 +1,125 @@
 # Live Streamer
 
-A full-stack video upload and HLS streaming system built with a NestJS microservices backend and a React frontend.
+## Executive Summary
 
-## Architecture Overview
+Live Streamer is a high-performance, asynchronous video processing and streaming platform designed for scalability and resilience. By leveraging an event-driven microservices architecture, the system efficiently ingests raw video assets, offloads intensive transcoding workloads, and delivers optimized HTTP Live Streaming (HLS) content to client applications. This decoupling ensures low latency on user-facing endpoints while allowing compute-heavy workers to scale horizontally.
 
-The platform is split into services with clear responsibilities:
+## Technical Architecture
 
-- `frontend` (`http://localhost:5173` in dev, `http://localhost:8080` in Docker)
-  - Upload UI and player UI.
-- `api-gateway` (`http://localhost:3001`)
-  - Public backend entry point.
-  - Proxies upload/status requests.
-  - Serves HLS playlist/segment files from MinIO.
-- `video-upload-service` (`http://localhost:3002`)
-  - Accepts uploaded videos.
-  - Stores metadata in PostgreSQL.
-  - Uploads raw files to MinIO.
-  - Publishes processing jobs to RabbitMQ.
-- `video-processing-worker` (`http://localhost:3003`)
-  - Consumes RabbitMQ jobs.
-  - Downloads raw video from MinIO.
-  - Converts to HLS using `ffmpeg`.
-  - Uploads HLS output to MinIO and updates DB status.
-- `live-stream-backend` (`http://localhost:3000`)
-  - Base app scaffold used in early phases.
+The platform utilizes a microservices architecture communicating via REST APIs and AMQP-based message queues. The `api-gateway` acts as the single entry point, routing requests to the `video-upload-service`, which persists metadata in PostgreSQL and streams raw video chunks directly to MinIO. To prevent request blocking, transcoding tasks are dispatched to RabbitMQ, where a pool of `video-processing-worker` instances asynchronously consume jobs, transcode media to HLS using `ffmpeg`, and store the resulting segments back in MinIO for client consumption.
 
-Infra services:
+```mermaid
+graph TD
+    Client[Client App / React UI] -->|HTTP POST Upload| APIGateway[API Gateway]
+    Client -->|HTTP GET Polling| APIGateway
+    Client -->|HTTP GET HLS| APIGateway
+    
+    APIGateway -->|Proxies| UploadService[Video Upload Service]
+    APIGateway -->|Reads HLS| MinIO[(MinIO Object Storage)]
+    
+    UploadService -->|Writes Metadata| DB[(PostgreSQL)]
+    UploadService -->|Saves Raw Video| MinIO
+    UploadService -->|Publishes Job| RabbitMQ{RabbitMQ}
+    
+    Worker[Video Processing Worker] -->|Consumes Job| RabbitMQ
+    Worker -->|Reads Raw Video| MinIO
+    Worker -->|FFMPEG Transcode| Worker
+    Worker -->|Updates Status| DB
+    Worker -->|Saves HLS Assets| MinIO
+```
 
-- PostgreSQL 17 (`postgres:17-alpine`) host mapped to `localhost:5434`
-- RabbitMQ (`localhost:5672`, management UI at `localhost:15672`)
-- MinIO (`localhost:9000`, console at `localhost:9001`)
+## Key Features & Engineering Highlights
 
-## Request Flow
+- **Asynchronous Event-Driven Processing:** Heavy FFMPEG transcoding tasks are offloaded to dedicated workers via RabbitMQ, ensuring the API Gateway remains highly responsive and available for concurrent uploads.
+- **S3-Compatible Object Storage:** Utilizing MinIO isolates massive binary assets from the relational database, enabling scalable, high-throughput delivery of HLS playlists and segments.
+- **Decoupled Microservices:** Bounded contexts isolate public routing (`api-gateway`), ingestion (`video-upload-service`), and processing (`video-processing-worker`), facilitating independent scaling and fault isolation.
+- **Adaptive Bitrate Streaming Foundation:** Converts standard MP4 uploads into HLS (`.m3u8` / `.ts` segments), optimizing client-side playback performance across varying network conditions.
+- **Containerized Infrastructure Parity:** Docker Compose orchestrates PostgreSQL, RabbitMQ, and MinIO, guaranteeing environment consistency from local development to production deployment.
 
-1. Frontend sends `POST /upload` to API Gateway.
-2. API Gateway proxies to Video Upload Service.
-3. Video Upload Service stores raw object in MinIO, inserts DB row with `PENDING`, and publishes RabbitMQ job.
-4. Video Processing Worker consumes job, generates HLS (`index.m3u8` + `.ts`), uploads processed files to MinIO, updates row to `COMPLETED` (or `FAILED`).
-5. Frontend polls `GET /videos/:id` until `COMPLETED` and then plays `GET /hls/:videoId/:fileName` from API Gateway.
+## Tech Stack
 
-## Prerequisites
+**Backend & Core**
+
+- TypeScript / Node.js
+- NestJS (Microservices framework)
+- TypeORM (Object-Relational Mapping)
+
+**Frontend**
+
+- React 19 / TypeScript
+- Vite (Build tooling)
+- HLS.js / React Player
+
+**Infrastructure & Data**
+
+- PostgreSQL 17 (Relational Metadata)
+- RabbitMQ (AMQP Message Broker)
+- MinIO (S3-Compatible Object Storage)
+- Docker & Docker Compose (Container Orchestration)
+- FFMPEG (Media Transcoding)
+
+## Getting Started
+
+### Prerequisites
 
 - Node.js 20+
 - pnpm 8+
-- Docker + Docker Compose (for infra or full containerized run)
-- `ffmpeg` (only required when running worker on host machine; Docker worker image already contains it)
+- Docker and Docker Compose
 
-## Environment Setup
+### Local Development Setup
 
-Create `.env` at project root:
+1. **Configure Environment**
 
-```bash
-cp .env.example .env
-```
+   ```bash
+   cp .env.example .env
+   ```
 
-Default `.env.example` values already match this repo, including:
+2. **Start Infrastructure Services**
+   Boot up PostgreSQL, RabbitMQ, and MinIO locally.
 
-- PostgreSQL image: `postgres:17-alpine`
-- Host DB port: `5434`
-- Service ports: `3000`, `3001`, `3002`, `3003`
+   ```bash
+   docker compose up -d postgres rabbitmq minio minio-init
+   ```
 
-## Run Locally (Hybrid: Infra in Docker, apps on host)
+3. **Install Dependencies**
 
-1. Start infra:
+   ```bash
+   pnpm install
+   ```
 
-```bash
-docker compose up -d postgres rabbitmq minio minio-init
-```
+4. **Run Microservices**
+   Start the backend services in parallel (preferably in separate terminals or using a terminal multiplexer).
 
-2. Install deps:
+   ```bash
+   pnpm backend:start:video-upload-service:dev
+   pnpm backend:start:video-processing-worker:dev
+   pnpm backend:start:api-gateway:dev
+   ```
 
-```bash
-pnpm install
-```
+5. **Start the Frontend Application**
 
-3. Start backend services (separate terminals):
+   ```bash
+   pnpm frontend:start
+   ```
 
-```bash
-pnpm backend:start:video-upload-service:dev
-pnpm backend:start:video-processing-worker:dev
-pnpm backend:start:api-gateway:dev
-```
-
-Optional:
-
-```bash
-pnpm backend:start:live-stream-backend:dev
-```
-
-4. Start frontend:
-
-```bash
-pnpm frontend:start
-```
-
-## Run Fully in Docker
+*Alternatively, run the entire stack (services + infra) fully containerized:*
 
 ```bash
 docker compose up --build
 ```
 
-Endpoints:
+## API Documentation
 
-- Frontend: `http://localhost:8080`
-- API Gateway: `http://localhost:3001`
-- RabbitMQ UI: `http://localhost:15672`
-- MinIO Console: `http://localhost:9001`
+The `api-gateway` exposes the following primary endpoints on `http://localhost:3001`:
 
-## API Endpoints
+- **`GET /`**
+  Health check endpoint verifying gateway availability.
 
-Base URL: `http://localhost:3001`
+- **`POST /upload`**
+  Accepts `multipart/form-data` with a `file` field. Ingests raw video, stores it in MinIO, creates a database record, and queues a processing job. Returns a `videoId` and initial `PENDING` status.
 
-### Health/Hello
+- **`GET /videos/:id`**
+  Retrieves the current processing status (`PENDING`, `COMPLETED`, `FAILED`) and metadata (including the resolved `hlsPath` once finished) for a specific video upload.
 
-`GET /`
-
-Response:
-
-```json
-"Hello World!"
-```
-
-### Upload Video
-
-`POST /upload` (`multipart/form-data`, field name: `file`)
-
-Example:
-
-```bash
-curl -X POST http://localhost:3001/upload \
-  -F "file=@/absolute/path/to/video.mp4"
-```
-
-Success response:
-
-```json
-{
-  "videoId": "df0acd31-ca57-4ce6-8d49-18dcf84e60a7",
-  "status": "PENDING",
-  "storageKey": "cb56.../1700000000000-video.mp4"
-}
-```
-
-### Check Video Status
-
-`GET /videos/:id`
-
-Example:
-
-```bash
-curl http://localhost:3001/videos/df0acd31-ca57-4ce6-8d49-18dcf84e60a7
-```
-
-Response while processing:
-
-```json
-{
-  "id": "df0acd31-ca57-4ce6-8d49-18dcf84e60a7",
-  "status": "PENDING",
-  "hlsPath": null,
-  "storageKey": "cb56.../1700000000000-video.mp4",
-  "originalFileName": "video.mp4"
-}
-```
-
-Response when done:
-
-```json
-{
-  "id": "df0acd31-ca57-4ce6-8d49-18dcf84e60a7",
-  "status": "COMPLETED",
-  "hlsPath": "df0acd31-ca57-4ce6-8d49-18dcf84e60a7/index.m3u8",
-  "storageKey": "cb56.../1700000000000-video.mp4",
-  "originalFileName": "video.mp4"
-}
-```
-
-### Stream HLS Assets
-
-`GET /hls/:videoId/:fileName`
-
-Examples:
-
-- Playlist: `/hls/<videoId>/index.m3u8`
-- Segment: `/hls/<videoId>/segment_000.ts`
-
-## Standardized Error Response
-
-All backend apps now use a global exception filter with this response shape:
-
-```json
-{
-  "statusCode": 400,
-  "message": "No file provided. Use multipart/form-data with field name \"file\".",
-  "timestamp": "2026-02-24T01:00:00.000Z",
-  "path": "/upload"
-}
-```
-
-## Scripts (Root)
-
-```bash
-pnpm frontend:start
-pnpm frontend:build
-pnpm frontend:lint
-pnpm frontend:test
-
-pnpm backend:build
-pnpm backend:test
-pnpm backend:test:e2e
-pnpm backend:test:e2e:api-gateway
-
-pnpm backend:start:api-gateway:dev
-pnpm backend:start:video-upload-service:dev
-pnpm backend:start:video-processing-worker:dev
-pnpm backend:start:live-stream-backend:dev
-```
-
-## Testing Status (Phase 6)
-
-Validated in this phase:
-
-- Backend lint/build
-- Backend unit tests
-- API Gateway e2e tests (`GET /`, `GET /videos/:id`)
-- Frontend lint/build
-- Frontend component tests for `UploadView` and `PlayerView`
-
-## Task Phases
-
-Execution checklists are tracked in `docs/tasks`:
-
-- `docs/tasks/phase-0.md`
-- `docs/tasks/phase-1.md`
-- `docs/tasks/phase-2.md`
-- `docs/tasks/phase-3.md`
-- `docs/tasks/phase-4.md`
-- `docs/tasks/phase-5.md`
-- `docs/tasks/phase-6.md`
+- **`GET /hls/:videoId/:fileName`**
+  Serves the processed HTTP Live Streaming assets. Used by client media players to fetch the master playlist (`index.m3u8`) and individual video segments (`.ts` files).
